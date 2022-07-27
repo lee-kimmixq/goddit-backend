@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IUser, User } from "../model/User";
 import jsSHA from "jssha";
+import jwt from "jsonwebtoken";
 
 const myRequestListener = (req: Request, res: Response) => {
   console.log("backend received a request from frontend");
@@ -62,6 +63,13 @@ const checkUser = async (req: Request, res: Response) => {
       res.json({ success: false });
       return;
     }
+
+    const payload = { id: user._id };
+    const secret = process.env.JWT_TOKEN_KEY || ""; // to review
+    const token = jwt.sign(payload, secret);
+    const cookieOptions = { httpOnly: true };
+
+    res.cookie("jwt", token, cookieOptions);
     res.json({ success: true });
   } catch (e) {
     console.log("Unexpected error", e);
