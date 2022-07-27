@@ -1,4 +1,7 @@
 import express, { Express, Request, Response } from "express";
+import mongoose from "mongoose";
+
+mongoose.connect("mongodb://localhost/goddit");
 
 const app: Express = express();
 
