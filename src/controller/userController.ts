@@ -33,4 +33,27 @@ const addNewUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { myRequestListener, addNewUser };
+const checkUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.json({ success: false });
+      return;
+    }
+    // continue
+    const shaObj: jsSHA = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
+    shaObj.update(password);
+    const hashedPassword: string = shaObj.getHash("HEX");
+
+    if (user.password !== hashedPassword) {
+      res.json({ success: false });
+      return;
+    }
+    res.json({ success: true });
+  } catch (e) {
+    console.log("Unexpected error", e);
+  }
+};
+
+export default { myRequestListener, addNewUser, checkUser };
