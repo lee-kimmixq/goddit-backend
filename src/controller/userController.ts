@@ -8,7 +8,19 @@ const myRequestListener = (req: Request, res: Response) => {
 };
 
 const addNewUser = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password, isInstructor } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    isInstructor,
+  }: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    isInstructor: boolean;
+  } = req.body;
   // hash the password ===
   const shaObj: jsSHA = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
   shaObj.update(password);
@@ -34,7 +46,7 @@ const addNewUser = async (req: Request, res: Response) => {
 };
 
 const checkUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password }: { email: string; password: string } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) {
