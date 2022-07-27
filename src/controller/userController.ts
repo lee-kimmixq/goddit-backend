@@ -29,8 +29,8 @@ const addNewUser = async (req: Request, res: Response) => {
     } else {
       console.log("Unexpected error", e);
     }
+    res.status(500).json({ error: "Internal Server Error" });
   }
-  res.send("add");
 };
 
 export default { myRequestListener, addNewUser };
